@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     try {
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
-            return res.status(200).json({ text: "⚠️ خطأ: مفتاح API مفقود في إعدادات Vercel." });
+            return res.status(200).json({ text: "⚠️ خطأ: مفتاح API مفقود." });
         }
 
         const body = req.body;
@@ -31,14 +31,9 @@ export default async function handler(req, res) {
             ${isFirstRun ? "ابدأ بالتحليل والترحيب." : ""}
         `;
 
-        let contents = [];
-        
-        // تنسيق Gemini Pro يتطلب ترتيباً محدداً (User -> Model -> User)
-        // نبدأ دائماً برسالة User تحتوي على التعليمات
-        contents.push({ role: "user", parts: [{ text: systemPrompt }] });
+        let contents = [{ role: "user", parts: [{ text: systemPrompt }] }];
         
         if (history.length > 0) {
-             // دمج التاريخ السابق
              const recentHistory = history.slice(-4).map(msg => ({
                 role: msg.role === 'user' ? 'user' : 'model',
                 parts: [{ text: msg.parts[0].text }]
@@ -51,10 +46,10 @@ export default async function handler(req, res) {
             generationConfig: { temperature: 0.7 }
         });
 
-        // *** التعديل هنا: استخدام gemini-pro بدلاً من flash لضمان العمل ***
+        // *** استخدام gemini-1.5-flash الأحدث والأكثر توافقاً حالياً ***
         const options = {
             hostname: 'generativelanguage.googleapis.com',
-            path: `/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+            path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +71,7 @@ export default async function handler(req, res) {
         const jsonResponse = JSON.parse(responseText);
         
         if (jsonResponse.error) {
-             // طباعة الخطأ بوضوح إذا حدث
+             // إذا ظهر خطأ، سنعرفه بدقة
              return res.status(200).json({ text: `⚠️ خطأ جوجل: ${jsonResponse.error.message}` });
         }
 
