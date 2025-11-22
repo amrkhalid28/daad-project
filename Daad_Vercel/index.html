@@ -277,7 +277,7 @@
                     تحدث بلهجة سعودية مهنية.
                     ${payload.isFirstRun ? "ابدأ بالتحليل والترحيب." : ""}
                 `;
-
+AIzaSyAZcDET8R3752vyMO3EfPfKShyvYEt2_j4
                 let contents = [{ role: "user", parts: [{ text: systemPrompt }] }];
                 if (payload.history.length > 0) contents = contents.concat(payload.history.slice(-4));
 
@@ -356,3 +356,4 @@
     </script>
 </body>
 </html>
+
