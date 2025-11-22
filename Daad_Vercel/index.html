@@ -50,6 +50,7 @@
 </head>
 <body class="text-text-light antialiased">
 
+    <!-- الشاشة الرئيسية -->
     <main id="home-view" class="min-h-screen w-full flex items-center justify-center p-4 transition-opacity duration-500 opacity-100">
         <div class="max-w-4xl mx-auto w-full">
             <img src="https://i.ibb.co/fz5m8DNf/imgi-102-cropped-cropped-logo-daad-2000x2000-1-1-700x700-removebg-preview.png" alt="Daad Logo" class="h-20 w-auto rounded-lg shadow-md border border-accent-gold mx-auto mb-6" onerror="this.onerror=null; this.src='https://placehold.co/100x80/501323/D5C5A0?text=DAAD';">
@@ -68,6 +69,7 @@
         </div>
     </main>
 
+    <!-- نافذة البيانات -->
     <div id="client-info-modal" class="modal-backdrop fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-[100] opacity-0 pointer-events-none hidden" onclick="closeClientInfoModal()">
         <div class="bg-dark-secondary rounded-xl shadow-2xl border border-accent-gold/50 max-w-3xl w-full p-6" onclick="event.stopPropagation()">
             <div class="flex justify-between items-center mb-4">
@@ -145,12 +147,11 @@
 
     <script>
         // =================================================================
-        // ⚠️ ضع مفتاح API هنا مباشرة (بين علامات التنصيص)
+        // ⚠️ الخطوة الأخيرة والأهم: ضع مفتاح API هنا مباشرة ⚠️
         // =================================================================
-        const API_KEY = "AIzaSyACQQJiuXochh37NgmglgflxsLPU3R92Pk"; 
+        const API_KEY = "YOUR_API_KEY_HERE"; // 👈 امسح الكلمة دي وحط مفتاحك هنا بين علامات التنصيص
         
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytnMAGBbWM_eSxUQxIqU6F7xUoxAH1P5olmGMER3YacoJRCmzX5L5_Wy4rVCLfVgsw/exec"; 
-
         const PROPOSAL_STORAGE_KEY = 'daad_proposal';
         const CLIENT_INFO_KEY = 'daad_client';
         const MAX_MONTHS = 12;
@@ -259,7 +260,7 @@
         // *** الاتصال المباشر (Client-Side Fetch) ***
         async function callAssistant(payload) {
             try {
-                if (!API_KEY || API_KEY.includes("ضع_مفتاحك")) {
+                if (!API_KEY || API_KEY.includes("YOUR_API_KEY_HERE")) {
                     return "⚠️ خطأ: يرجى وضع مفتاح API في كود index.html (السطر 280) ثم إعادة الرفع.";
                 }
 
