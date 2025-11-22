@@ -1,7 +1,6 @@
 const https = require('https');
 
 export default async function handler(req, res) {
-    // إعدادات CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -31,10 +30,10 @@ export default async function handler(req, res) {
             generationConfig: { temperature: 0.7 }
         });
 
-        // استخدام gemini-pro لضمان التوافق
+        // نستخدم gemini-1.5-flash لأنه الأفضل مع المفاتيح الجديدة
         const options = {
             hostname: 'generativelanguage.googleapis.com',
-            path: `/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+            path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
