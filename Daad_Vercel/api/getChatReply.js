@@ -1,8 +1,6 @@
 const https = require('https');
 
-// استخدام module.exports بدلاً من export default عشان نلغي التحذير الأصفر
-module.exports = async (req, res) => {
-    // إعدادات CORS
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -32,7 +30,7 @@ module.exports = async (req, res) => {
             generationConfig: { temperature: 0.7 }
         });
 
-        // استخدام gemini-pro المضمون
+        // *** نستخدم gemini-pro هنا في الملف الجديد ***
         const options = {
             hostname: 'generativelanguage.googleapis.com',
             path: `/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
@@ -66,4 +64,22 @@ module.exports = async (req, res) => {
     } catch (error) {
         return res.status(200).json({ text: `⚠️ خطأ سيرفر: ${error.message}` });
     }
-};
+}
+```
+6.  اضغط **Commit changes**.
+
+---
+
+### الخطوة 2: توجيه الموقع للملف الجديد 🔄
+الآن سنخبر ملف `index.html` أن يترك الملف القديم ويتحدث مع الجديد `chat_v2`.
+
+1.  ارجع للصفحة الرئيسية للمشروع على **GitHub**.
+2.  اضغط على ملف **`index.html`**.
+3.  اضغط علامة القلم ✏️.
+4.  ابحث (Ctrl+F) عن كلمة: `getChatReply`.
+5.  ستجدها داخل دالة اسمها `callAssistant` وأخرى اسمها `sendChatMessage` وغيرها.
+6.  استبدل أي كلمة `getChatReply` تجدها بـ **`chat_v2`**.
+
+    * السطر سيكون هكذا:
+        ```javascript
+        const res = await fetch('/api/chat_v2', { ...
