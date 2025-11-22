@@ -1,6 +1,8 @@
 const https = require('https');
 
-export default async function handler(req, res) {
+// استخدام module.exports بدلاً من export default عشان نلغي التحذير الأصفر
+module.exports = async (req, res) => {
+    // إعدادات CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -30,7 +32,7 @@ export default async function handler(req, res) {
             generationConfig: { temperature: 0.7 }
         });
 
-        // *** استخدام gemini-pro المضمون ***
+        // استخدام gemini-pro المضمون
         const options = {
             hostname: 'generativelanguage.googleapis.com',
             path: `/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
@@ -64,4 +66,4 @@ export default async function handler(req, res) {
     } catch (error) {
         return res.status(200).json({ text: `⚠️ خطأ سيرفر: ${error.message}` });
     }
-}
+};
