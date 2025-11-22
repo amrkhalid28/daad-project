@@ -1,6 +1,7 @@
 const https = require('https');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
+    // 1. إعدادات السماح (CORS)
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -9,12 +10,18 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
     try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) return res.status(200).json({ text: "⚠️ خطأ: مفتاح API مفقود." });
+        // ⚠️⚠️ ضع مفتاح API الخاص بك هنا مباشرة بين علامات التنصيص ⚠️⚠️
+        const apiKey = "AIzaSyAZcDET8R3752vyMO3EfPfKShyvYEt2_j4"; 
 
-        const body = req.body;
+        if (!apiKey || apiKey.includes("xxxx")) {
+            return res.status(200).json({ text: "⚠️ خطأ: يرجى وضع مفتاح API في الكود (السطر 15)." });
+        }
+
+        // 2. قراءة البيانات
+        const body = req.body || {};
         const { history = [], clientInfo = {}, isFirstRun = false } = body;
 
+        // 3. إعداد الرسالة
         const systemPrompt = `
             أنت "مساعد ض" (Daad Assistant)، المستشار الذكي لشركة "ضاد".
             بيانات العميل: ${JSON.stringify(clientInfo)}
@@ -30,7 +37,7 @@ export default async function handler(req, res) {
             generationConfig: { temperature: 0.7 }
         });
 
-        // *** نستخدم gemini-pro هنا في الملف الجديد ***
+        // 4. الاتصال بـ Gemini Pro
         const options = {
             hostname: 'generativelanguage.googleapis.com',
             path: `/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
@@ -64,22 +71,4 @@ export default async function handler(req, res) {
     } catch (error) {
         return res.status(200).json({ text: `⚠️ خطأ سيرفر: ${error.message}` });
     }
-}
-```
-6.  اضغط **Commit changes**.
-
----
-
-### الخطوة 2: توجيه الموقع للملف الجديد 🔄
-الآن سنخبر ملف `index.html` أن يترك الملف القديم ويتحدث مع الجديد `chat_v2`.
-
-1.  ارجع للصفحة الرئيسية للمشروع على **GitHub**.
-2.  اضغط على ملف **`index.html`**.
-3.  اضغط علامة القلم ✏️.
-4.  ابحث (Ctrl+F) عن كلمة: `getChatReply`.
-5.  ستجدها داخل دالة اسمها `callAssistant` وأخرى اسمها `sendChatMessage` وغيرها.
-6.  استبدل أي كلمة `getChatReply` تجدها بـ **`chat_v2`**.
-
-    * السطر سيكون هكذا:
-        ```javascript
-        const res = await fetch('/api/chat_v2', { ...
+};
